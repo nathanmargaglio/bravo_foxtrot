@@ -1,5 +1,5 @@
 import matplotlib
-#~ matplotlib.use('Agg') # delete this for live plot, need it for SSH
+matplotlib.use('Agg') # omit this for live plot, need it for SSH
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from matplotlib import text
