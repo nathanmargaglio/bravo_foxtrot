@@ -1,0 +1,49 @@
+$def with (dir_list)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Buffalo First Data Server</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Buffalo Pricing Models</h2>
+  <p><a href="qgis">QGIS Rendered Maps (Sale Price)</a></p>
+  <p>Neural Networks trained to predict housing prices in Buffalo:</p>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Neural Network Topology</th>
+	<th>Last Log</th>
+        <th>Rendering</th>
+      </tr>
+    </thead>
+    <tbody>
+
+	$for k,d in dir_list.iteritems():
+		$ text = d.split('Iter')[0].split('\n')
+		$ last_log = d.split('Iter')[-1].split('\n')
+		<tr>
+		<td>
+		$for tx in text:
+			$tx<br>
+		<td/>
+		<td>
+		$for tx in last_log:
+			$tx<br>
+		<td/>
+		<td><a href="$k">Rendering:$k</a><td/>
+		</tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
+
