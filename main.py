@@ -73,7 +73,7 @@ def trainNetwork(dh):
 		if lowest_error[1] > error[-1]:
 			lowest_error = [0, error[-1]]
 		if lowest_error[0] >= 3:
-			pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/pics/'+name+'.png')
+			pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/static/'+name+'.png')
 			return error[-1]
 		try:
 			if error[-1] > error[-2]:
@@ -86,7 +86,7 @@ def trainNetwork(dh):
 		
 		pltD.addData([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
 		pltD.plot(raw, actual, guessed, error, i)
-	pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/pics/'+name+'.png')
+	pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/static/'+name+'.png')
 	return error[-1]
 	
 dh = DataHandle()
