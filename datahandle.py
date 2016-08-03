@@ -6,23 +6,24 @@ import random
 import sys
 
 class DataHandle:
-	def __init__(self, params='all'):
+	def __init__(self, params='all', targets='default'):
 		self.raw = self.importData()
 		self.master_coords = self.importGeoData()
 		self.raw = self.joinData(self.raw, self.master_coords)
 		self.raw = self.basicClean(self.raw)
 		self.setTrainingParameters(params)
-		self.target_columns = ['SP/AV']
+		self.setTargetParameters(targets)
 		
 		self.input_matrix, self.output_matrix = \
 			self.genIOMatrix(self.raw, 
 								self.training_columns, 
 								self.target_columns)
+								
 	def setTrainingParameters(self, params='all'):
 		if type(params) == 'list':
 			self.training_columns = params
 		if params == 'all':
-			self.training_columns = ['X', 'Y', 'Beds Total', 'Assessed Value',
+			self.training_columns = ['X', 'Y', 'Beds Total', 'Assessed Value', 'DOM',
 								'Sq Ft Total', 'Lot Dimensions Depth', 'Lot Dimensions Frontage',
 								'Numof Acres', 'Numof Stories', 'Numof Garage Spaces', 
 								'Numof Rooms', 'Baths Half', 'Baths Full','Age']
@@ -34,12 +35,19 @@ class DataHandle:
 			self.training_columns = ['X','Y','Assessed Value']
 		if params == 'gamma':
 			# alpha is initially trained on (X,Y) coordinates
-			self.training_columns = ['X','Y','Assessed Value','Numof Rooms']
-			
-		
+			self.training_columns = ['X','Y','Assessed Value','DOM']
+	
+	def setTargetParameters(self, params='default'):
+		if type(params) == 'list':
+			self.target_columns = params
+		if params == 'default':
+			self.target_columns = ['SP/SF']
 			
 	def getTrainingParameters(self):
 		return self.training_columns
+		
+	def getTargetParameters(self):
+		return self.target_columns
 		
 	def getIOData(self):
 		return self.input_matrix, self.output_matrix
@@ -87,8 +95,10 @@ class DataHandle:
 						(raw[['Sale Price','Assessed Value']]
 						.replace( '[\$,)]','', regex=True )).astype(float)
 		raw['SP/AV'] = raw['Sale Price']/raw['Assessed Value']
+		raw['SP/SF'] = raw['Sale Price']/raw['Sq Ft Total']
 		raw = raw[raw['Assessed Value'] != 0].reset_index()
 		raw = raw[raw['SP/AV'] < 10]
+		raw = raw[raw['SP/SF'] < 200]
 		return raw
 		
 	def normalize(self, data):
@@ -118,3 +128,28 @@ class DataHandle:
 			output_vector[:,n] = array(raw[c], dtype=object)
 			
 		return input_vector, output_vector
+		
+	def getWorkingData(self):
+		input_vector, output_vector = self.getIOData()
+
+		#~ dataset = zip(input_vector, output_vector)
+		data_vectors = concatenate((input_vector, output_vector),axis=1)
+		data_vectors = data_vectors[~isnan(data_vectors).any(axis=1)]
+		
+		random.shuffle(data_vectors)
+		training_data = array(data_vectors[:int(len(data_vectors)*0.8)])
+		validation_data = array(data_vectors[int(len(data_vectors)*0.8):])
+		
+		wi_vec = array(training_data[:,:-1], dtype=float32)
+		wo_vec = array(training_data[:,-1], dtype=float32)
+		
+		vi_vec = array(validation_data[:,:-1], dtype=float32)
+		vo_vec = array(validation_data[:,-1], dtype=float32)
+
+		return wi_vec, wo_vec, vi_vec, vo_vec
+		
+if __name__ == "__main__":
+	dh = DataHandle()
+	dh.getWorkingData()
+		
+		

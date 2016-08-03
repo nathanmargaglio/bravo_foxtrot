@@ -24,7 +24,7 @@ class plotDevice:
 	def getData(self):
 		return self.data_info
 
-	def plot(self, raw, actual, guessed, error, i, filepath=None):
+	def plot(self, raw, actual, guessed, error, val_error, i, filepath=None):
 		name = self.name
 		if not filepath:
 			#Default file path
@@ -78,7 +78,8 @@ class plotDevice:
 		ax21.plot(actual,'g')
 		ax21.plot(guessed, 'r')
 
-		ax22.plot(error)
+		ax22.plot(error,'g')
+		ax22.plot(val_error,'r')
 		plt.title(str(error[-1]))
 		
 		ax11.grid(b=False)

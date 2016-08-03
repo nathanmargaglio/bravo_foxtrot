@@ -14,7 +14,7 @@ from keras.layers.normalization import BatchNormalization
 class NeuralNet:
 	def __init__(self, num_of_params):
 		self.name = str(int(time()))
-		self.topology, self.learning_rate = self.genTopology()
+		self.topology, self.learning_rate, self.epochs = self.genTopology()
 		self.num_of_params = num_of_params
 		self.model = self.makeModel(self.topology, self.learning_rate,
 									self.num_of_params)
@@ -24,9 +24,9 @@ class NeuralNet:
 		topology.append(random.randint(2,20))
 		for i in range(random.randint(1,2)):
 			topology.append(random.randint(2,20))
-		learning_rate = 1e-4
-		epochs=100
-		return topology, learning_rate
+		learning_rate = 5e-3
+		epochs=10
+		return topology, learning_rate, epochs
 		
 	def makeModel(self,topology, lr, num_of_params):
 		model = Sequential()
@@ -51,7 +51,7 @@ class NeuralNet:
 		return model
 		
 	def getTopology(self):
-		return self.topology, self.learning_rate
+		return self.topology, self.learning_rate, self.epochs
 		
 	def getModel(self):
 		return self.model
