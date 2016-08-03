@@ -90,10 +90,11 @@ def trainNetwork(dh):
 	return error[-1]
 	
 dh = DataHandle()
-for param_set in ['alpha','beta','gamma']:
-	print "Starting Training..."
-	dh.setTrainingParameters(param_set)
-	results = trainNetwork(dh)
-	print "Training Complete..."
-	print
+while True:
+	for param_set in ['alpha','beta','gamma']:
+		print "Starting Training..."
+		dh.setTrainingParameters(param_set)
+		results = trainNetwork(dh)
+		print "Training Complete..."
+		print
 	
