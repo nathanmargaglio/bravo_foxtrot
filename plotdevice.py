@@ -13,17 +13,24 @@ from numpy import *
 class plotDevice:
 	def __init__(self, name):
 		self.name = name
+		self.fig = plt.figure(figsize=(12,8), dpi=80)
 
 	def addData(self, top):
 		self.data_info = top
+		
+	def setParams(self, params):
+		self.params = params
 
 	def getData(self):
 		return self.data_info
 
-	def plot(self, raw, actual, guessed, error, i):
+	def plot(self, raw, actual, guessed, error, i, filepath=None):
 		name = self.name
+		if not filepath:
+			#Default file path
+			filepath = 'logs/'+name+'/img/'+str(i)+'.png'
+		fig = self.fig
 		name, topology, learning_rate, decay_rate, batch_ratio, epochs = self.getData()
-		fig = plt.figure(figsize=(12,8), dpi=80)
 		ax11 = plt.subplot2grid((4, 8), (0, 0), rowspan=3, colspan=4, 	projection='3d')
 		ax12 = plt.subplot2grid((4, 8), (0, 4), rowspan=3, colspan=4)
 		ax21 = plt.subplot2grid((4, 8), (3, 0), rowspan=1, colspan=4)
@@ -100,7 +107,8 @@ class plotDevice:
 		txtstr += "Epochs       : " + str(epochs)
 
 		ax12.annotate(txtstr, xy=(25,600), xycoords='figure pixels')
-		plt.savefig('logs/'+name+'/img/'+str(i)+'.png')
+		ax12.annotate(self.params, xy=(25,25), xycoords='figure pixels')
+		plt.savefig(filepath)
 
 		ax11.cla()
 		ax12.cla()

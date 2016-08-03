@@ -21,11 +21,11 @@ class NeuralNet:
 		
 	def genTopology(self):
 		topology = []
-		topology.append(random.randint(2,35))
-		for i in range(random.randint(1,4)):
-			topology.append(random.randint(2,355))
-		learning_rate = random.choice([1e-2, 1e-3, 1e-4, 1e-5])
-		epochs=random.randint(1,100)
+		topology.append(random.randint(2,20))
+		for i in range(random.randint(1,2)):
+			topology.append(random.randint(2,20))
+		learning_rate = 1e-4
+		epochs=100
 		return topology, learning_rate
 		
 	def makeModel(self,topology, lr, num_of_params):

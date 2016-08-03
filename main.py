@@ -27,16 +27,14 @@ def trainNetwork(dh):
 	data_vectors = data_vectors[~isnan(data_vectors).any(axis=1)]
 
 	pltD = plotDevice(name)
+	pltD.setParams(dh.getTrainingParameters())
 	
 	error = []
-	epochs=random.randint(1,100)
-	past_error= 3
-	decay_rate = random.choice(linspace(0.1,1,10))
-	batch_ratio = random.choice(linspace(0.01,0.1,10))
+	epochs=25
+	decay_rate = 0.5
+	batch_ratio = 1#random.choice(linspace(0.01,0.1,10))
 	batch_size = int(len(data_vectors)*batch_ratio)
-	dec_seq = random.randint(10,25)
-	lowest_error = 0.5
-	lowest_count = 0
+	lowest_error = [0,3.]
 	
 	lg = Logger(name)
 	lg.log_header([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
@@ -52,18 +50,6 @@ def trainNetwork(dh):
 		print "Error: " + str(current_error)
 		print "LR:    " + str(model.optimizer.lr.get_value())
 		print
-
-		if past_error < current_error:
-			model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
-		past_error = current_error
-		
-		if lowest_error > current_error:
-			lowest_error = current_error
-			lowest_count = 0
-		else:
-			lowest_count += 1
-			if lowest_count == dec_seq:
-				return error[-1]
 		
 		actual = []
 		guessed = []
@@ -82,14 +68,31 @@ def trainNetwork(dh):
 		
 		error.append(hist.history['mean_absolute_error'][-1])
 		
+		lowest_error[0] += 1
+		if lowest_error[1] > error[-1]:
+			lowest_error = [0, error[-1]]
+		if lowest_error[0] >= 3:
+			pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/pics/'+name+'.png')
+			return error[-1]
+		try:
+			if error[-1] > error[-2]:
+				model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
+				if error[-1] > error[-3]:
+					pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/pics/'+name+'.png')
+					return error[-1]
+		except:
+			pass
+		
 		pltD.addData([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
 		pltD.plot(raw, actual, guessed, error, i)
+	pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/pics/'+name+'.png')
+	return error[-1]
 	
 dh = DataHandle()
-while True:
+for param_set in ['alpha','beta','gamma']:
 	print "Starting Training..."
-	trainNetwork(dh)
-	sys.stdout = oldstdout
+	dh.setTrainingParameters(param_set)
+	results = trainNetwork(dh)
 	print "Training Complete..."
 	print
 	

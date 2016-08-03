@@ -6,22 +6,40 @@ import random
 import sys
 
 class DataHandle:
-	def __init__(self):
+	def __init__(self, params='all'):
 		self.raw = self.importData()
 		self.master_coords = self.importGeoData()
 		self.raw = self.joinData(self.raw, self.master_coords)
 		self.raw = self.basicClean(self.raw)
-		self.training_columns = ['X', 'Y', 'Beds Total',
-								'Sq Ft Total', 'Lot Dimensions Depth', 'Lot Dimensions Frontage',
-								'Numof Acres', 'Numof Stories', 'Numof Garage Spaces', 
-								'Numof Rooms', 'Baths Half', 'Baths Full','Age']
-						
+		self.setTrainingParameters(params)
 		self.target_columns = ['SP/AV']
 		
 		self.input_matrix, self.output_matrix = \
 			self.genIOMatrix(self.raw, 
 								self.training_columns, 
 								self.target_columns)
+	def setTrainingParameters(self, params='all'):
+		if type(params) == 'list':
+			self.training_columns = params
+		if params == 'all':
+			self.training_columns = ['X', 'Y', 'Beds Total', 'Assessed Value',
+								'Sq Ft Total', 'Lot Dimensions Depth', 'Lot Dimensions Frontage',
+								'Numof Acres', 'Numof Stories', 'Numof Garage Spaces', 
+								'Numof Rooms', 'Baths Half', 'Baths Full','Age']
+		if params == 'alpha':
+			# alpha is initially trained on (X,Y) coordinates
+			self.training_columns = ['X','Y']
+		if params == 'beta':
+			# alpha is initially trained on (X,Y) coordinates
+			self.training_columns = ['X','Y','Assessed Value']
+		if params == 'gamma':
+			# alpha is initially trained on (X,Y) coordinates
+			self.training_columns = ['X','Y','Assessed Value','Numof Rooms']
+			
+		
+			
+	def getTrainingParameters(self):
+		return self.training_columns
 		
 	def getIOData(self):
 		return self.input_matrix, self.output_matrix
