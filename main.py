@@ -15,6 +15,7 @@ def trainNetwork(dh):
 	input_vector, output_vector = dh.getIOData()
 	raw = dh.getRawData()
 	nn = NeuralNet(input_vector.shape[1])
+	nn.name = sys.argv[1] + "_" + nn.name
 	name = nn.name
 	
 	# This generates a topology and learning_rate (currently randomly)
