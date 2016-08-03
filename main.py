@@ -79,7 +79,7 @@ def trainNetwork(dh):
 			if error[-1] > error[-2]:
 				model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
 				if error[-1] > error[-3]:
-					pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/pics/'+name+'.png')
+					pltD.plot(raw, actual, guessed, error, 0,filepath = 'logs/static/'+name+'.png')
 					return error[-1]
 		except:
 			pass
