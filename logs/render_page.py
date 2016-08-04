@@ -22,9 +22,13 @@ import web
 render = web.template.render('templates/')
 
 urls = (
+	'/favicon.ico','icon',
 	'/qgis/(.*)', 'maps',
     	'/(.*)', 'index'
 )
+
+class icon:
+	def GET(self): raise web.seeother("static/favicon.ico")
 
 class index:
     def GET(self, name):
@@ -37,10 +41,12 @@ class index:
 			try:
         	                return open('gifs/{}.gif'.format(name),'rb').read()
 			except:
-				print "Rendering Gif... (pronounced JIF)"
-				subprocess.call('sudo ./render_gif.sh {} tmp'.format(name),shell=True)
-				return open('gifs/{}tmp.gif'.format(name),'rb').read()
-
+				try:
+					print "Rendering Gif... (pronounced JIF)"
+					subprocess.call('sudo ./render_gif.sh {} tmp'.format(name),shell=True)
+					return open('gifs/{}tmp.gif'.format(name),'rb').read()
+				except:
+					print name
 class maps:
 	def GET(self,name):
 		if not name:
