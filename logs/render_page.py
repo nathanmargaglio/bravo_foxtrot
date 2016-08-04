@@ -46,7 +46,7 @@ class maps:
 		if not name:
 			return render.maps()
 		else:
-			return open('pics/{}.png'.format(name), 'rb').read()
+			return open('static/{}.png'.format(name), 'rb').read()
 if __name__ == "__main__":
     app = web.application(urls, globals())
     app.run()

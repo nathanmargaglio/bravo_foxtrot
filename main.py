@@ -76,8 +76,11 @@ def trainNetwork(dh):
 		except:
 			pass
 		
+		nn.saveModel()
 		pltD.addData([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
 		pltD.plot(raw, actual, guessed, error, val_error, i)
+	
+	nn.saveModel()
 	pltD.plot(raw, actual, guessed, error, val_error, 0,filepath = 'logs/static/'+name+'.png')
 	return error[-1]
 	

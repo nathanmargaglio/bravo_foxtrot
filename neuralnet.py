@@ -18,7 +18,7 @@ class NeuralNet:
 		self.num_of_params = num_of_params
 		self.model = self.makeModel(self.topology, self.learning_rate,
 									self.num_of_params)
-		
+
 	def genTopology(self):
 		topology = []
 		topology.append(random.randint(2,20))
@@ -55,3 +55,22 @@ class NeuralNet:
 		
 	def getModel(self):
 		return self.model
+		
+	def saveModel(self):
+		model_json = self.model.to_json()
+		with open('logs/'+self.name+'/model.json', "w") as json_file:
+			json_file.write(model_json)
+		# serialize weights to HDF5
+		self.model.save_weights('logs/'+self.name+'/weights.h5',overwrite=True)
+		
+	def loadModel(self, model_id=None, weights=True):
+		if not model_id:
+			model_id=self.name
+		json_file = open('logs/'+model_id+'/model.json', 'r')
+		loaded_model_json = json_file.read()
+		json_file.close()
+		self.model = model_from_json(loaded_model_json)
+		if weights:
+			self.model.load_weights('logs/'+model_id+'/weights.h5')
+		sgd = SGD(lr=self.learning_rate)
+		model.compile(loss='mae', optimizer=sgd, metrics=['MAE'])
