@@ -50,8 +50,8 @@ class plotDevice:
 		#~ yi = linspace(min(raw_plot['Y']), max(raw_plot['Y']), 50)
 		
 		#Plot arbitrary region
-		xi = linspace(-1., 0, 25)
-		yi = linspace(-1., 0, 25)
+		xi = linspace(-1., 0, 50)
+		yi = linspace(-1., 0, 50)
 		
 		X, Y = meshgrid(xi, yi)
 				
