@@ -68,16 +68,21 @@ def trainNetwork(dh):
 		input_vector, output_vector = dh.getIOData()
 		for input_single in input_vector:
 			guessed.append(float(model.predict(array([input_single]))))
+			
 		actual = array(output_vector)
 		guessed = array(guessed)
 		valid_set = ~isnan(guessed)
-		error.append( mean(abs(actual[valid_set]-guessed[valid_set]))/mean(actual) )
+		error.append( mean(abs(actual[valid_set]-guessed[valid_set])/actual[valid_set]) )
 		
 		val_error_raw = []
+		vguessed = []
 		for vi in zip(vi_vec,vo_vec):
-			vguessed = float(model.predict(array([vi[0]])))
-			val_error_raw.append(abs(vguessed-vi[1]))
-		val_error.append( mean(val_error_raw)/mean(vo_vec) )
+			vguessed.append(float(model.predict(array([vi[0]]))))
+		
+		vactual = array(vo_vec)
+		vguessed = array(vguessed)
+		valid_set = ~isnan(vguessed)
+		val_error.append( mean(abs(vactual[valid_set]-vguessed[valid_set])/vactual[valid_set]) )
 		
 		lowest_error[0] += 1
 		if not lowest_error[1]:
