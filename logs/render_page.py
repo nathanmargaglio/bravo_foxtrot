@@ -35,7 +35,7 @@ class index:
 		if name == "qgis":
 			return render.maps()
 		if "gmap" in name:
-			trunc = "".join(name.split('_')[1:])
+			trunc = "_".join(name.split('_')[1:])
 			return open('{}/map.html'.format(trunc),'rb').read()
 		if not name:
 			dir_list = get_dir_list()
