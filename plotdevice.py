@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Agg') # omit this for live plot, need it for SSH
+#~ matplotlib.use('Agg') # omit this for live plot, need it for SSH
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from matplotlib import text
@@ -50,24 +50,25 @@ class plotDevice:
 		#~ yi = linspace(min(raw_plot['Y']), max(raw_plot['Y']), 50)
 		
 		#Plot arbitrary region (for wire frame)
-		xi_wire = linspace(-1., 0, 50)
-		yi_wire = linspace(-1., 0, 50)
+		xi_wire = linspace(41.5, 43.5, 50)
+		yi_wire = linspace(-80., -77., 50)
 		
 		X_wire, Y_wire = meshgrid(xi_wire, yi_wire)
 		
-		Z_wire = griddata(	raw_plot['X'], 
-						raw_plot['Y'], 
+		Z_wire = griddata(	raw_plot['Latitude'], 
+						raw_plot['Longitude'], 
 						array(raw_plot['Z']), 
 						xi_wire, yi_wire)
 		
 		#Plot arbitrary region
-		xi = linspace(-1., 0, 50)
-		yi = linspace(-1., 0, 50)
+
+		xi = linspace(41.5, 43.5, 50)
+		yi = linspace(-80., -77., 50)
 		
 		X, Y = meshgrid(xi, yi)
 
-		Z = griddata(	raw_plot['X'], 
-						raw_plot['Y'], 
+		Z = griddata(	raw_plot['Latitude'], 
+						raw_plot['Longitude'], 
 						array(raw_plot['Z']), 
 						xi, yi)
 						

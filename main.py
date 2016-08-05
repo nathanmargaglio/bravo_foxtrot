@@ -107,6 +107,7 @@ def trainNetwork(dh):
 			
 		if lowest_error[0] >= 13:
 			exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error)
+			return 0
 
 		nn.saveModel()
 		pltD.addData([name, topology, trn_error, val_error])
@@ -124,6 +125,7 @@ def trainNetwork(dh):
 		print
 	
 	exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error)
+	return 0
 	
 dh = DataHandle()
 dh.setTrainingParameters('gamma')

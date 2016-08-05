@@ -30,7 +30,7 @@ class NeuralNet:
 	def genTopology(self):
 		topology = []
 		topology.append(random.randint(10,20))
-		for i in range(random.randint(1,5)):
+		for i in range(random.randint(1,3)):
 			topology.append(random.randint(10,20))
 		return topology
 		
