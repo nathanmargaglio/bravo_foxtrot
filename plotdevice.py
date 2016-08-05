@@ -9,11 +9,13 @@ from matplotlib.mlab import griddata
 
 import pandas as pd
 from numpy import *
+from geoplot import GeoPlot
 
 class plotDevice:
 	def __init__(self, name):
 		self.name = name
 		self.fig = plt.figure(figsize=(12,8), dpi=80)
+		self.gp = GeoPlot(name)
 
 	def addData(self, top):
 		self.data_info = top
@@ -44,6 +46,10 @@ class plotDevice:
 		raw_plot = raw_plot[~array(raw_plot['X'].apply(isnan))]
 		raw_plot = raw_plot[~array(raw_plot['Y'].apply(isnan))]
 		raw_plot = raw_plot[~array(raw_plot['Z'].apply(isnan))]
+		
+		del self.gp
+		self.gp = GeoPlot(name)
+		self.gp.draw(raw_plot)
 		
 		# Plot Everything
 		#~ xi = linspace(min(raw_plot['X']), max(raw_plot['X']), 50)
