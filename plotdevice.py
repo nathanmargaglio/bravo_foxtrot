@@ -30,7 +30,7 @@ class plotDevice:
 			#Default file path
 			filepath = 'logs/'+name+'/img/'+str(i)+'.png'
 		fig = self.fig
-		name, topology, learning_rate, decay_rate, batch_ratio, epochs = self.getData()
+		name, topology, trn_error, val_error = self.getData()
 		ax11 = plt.subplot2grid((4, 8), (0, 0), rowspan=3, colspan=4, 	projection='3d')
 		ax12 = plt.subplot2grid((4, 8), (0, 4), rowspan=3, colspan=4)
 		ax21 = plt.subplot2grid((4, 8), (3, 0), rowspan=1, colspan=4)
@@ -89,7 +89,7 @@ class plotDevice:
 
 		ax22.plot(trn_error,'g')
 		ax22.plot(val_error,'r')
-		plt.title(str(trn_error[-1]) + ' / ' + str(val_error[-1]))
+		#~ plt.title(str(trn_error[-1]) + ' / ' + str(val_error[-1]))
 		
 		ax11.grid(b=False)
 		ax12.grid(b=False)
@@ -109,14 +109,12 @@ class plotDevice:
 
 		txtstr = ""
 		
-		txtstr += "Start Training: " + name + "\n"
-		txtstr += "Topology     : " + " - ".join(array(topology,dtype=str)) + "\n"
-		txtstr += "Learn Rate   : " + str(learning_rate) + "\n"
-		txtstr += "LR_Decay Rate: " + str(decay_rate) + "\n"
-		txtstr += "Batch Ratio  : " + str(batch_ratio) + "\n"
-		txtstr += "Epochs       : " + str(epochs)
+		txtstr += "Model Name       : " + name + '\n'
+		txtstr += "Topology         : " + " - ".join(array(topology,dtype=str)) + '\n'
+		txtstr += "Training Error   : " + str(trn_error[-1]) + '\n'
+		txtstr += "Validation Error : " + str(val_error[-1]) + '\n'
 
-		ax12.annotate(txtstr, xy=(25,600), xycoords='figure pixels')
+		ax12.annotate(txtstr, xy=(25,675), xycoords='figure pixels')
 		ax12.annotate(self.params, xy=(25,25), xycoords='figure pixels')
 		plt.savefig(filepath)
 

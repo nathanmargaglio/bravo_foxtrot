@@ -27,6 +27,12 @@ def randomModel(dh):
 	topology, learning_rate, epochs = nn.getTopology()
 	
 	return nn
+	
+def exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error):
+	lg.log_header([name, topology, trn_error, val_error])
+	pltD.addData([name, topology, trn_error, val_error])
+	pltD.plot(raw, actual, guessed, trn_error, val_error, 1,filepath = 'logs/static/'+name+'.png')
+	nn.saveModel()
 
 def trainNetwork(dh):
 	# we initialize a dataset
@@ -52,7 +58,6 @@ def trainNetwork(dh):
 	lowest_error = [0,None]
 	
 	lg = Logger(name)
-	lg.log_header([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
 	lg.toterm()
 	
 	trn_error = []
@@ -103,16 +108,13 @@ def trainNetwork(dh):
 			model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
 			
 		if lowest_error[0] >= 13:
-			pltD.plot(raw, actual, guessed, trn_error, val_error, 0,filepath = 'logs/static/'+name+'.png')
-			return trn_error[-1]
+			exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error)
 
 		nn.saveModel()
-		pltD.addData([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
+		pltD.addData([name, topology, trn_error, val_error])
 		pltD.plot(raw, actual, guessed, trn_error, val_error, i)
 	
-	nn.saveModel()
-	pltD.plot(raw, actual, guessed, trn_error, val_error, 0,filepath = 'logs/static/'+name+'.png')
-	return trn_error[-1]
+	exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error)
 	
 dh = DataHandle()
 print "Starting Training..."

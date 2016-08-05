@@ -17,13 +17,11 @@ class Logger:
 		sys.stdout = self.f
 		
 	def log_header(self, initilizers):
-		name, topology, learning_rate, decay_rate, batch_ratio, epochs = initilizers
-		print "Start Training: " + name
-		print "Topology     : " + " - ".join(array(topology,dtype=str))
-		print "Learn Rate   : " + str(learning_rate)
-		print "LR_Decay Rate: " + str(decay_rate)
-		print "Batch Ratio  : " + str(batch_ratio)
-		print "Epochs       : " + str(epochs)
+		name, topology, trn_error, val_error = initilizers
+		print "Model Name       : " + name
+		print "Topology         : " + " - ".join(array(topology,dtype=str))
+		print "Training Error   : " + str(trn_error)
+		print "Validation Error : " + str(val_error)
 		print
 		
 	def save(self):

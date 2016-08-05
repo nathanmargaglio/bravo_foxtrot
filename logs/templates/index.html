@@ -21,16 +21,15 @@ $def with (dir_list)
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Neural Network Topology</th>
-	<th>Last Log</th>
-        <th>Rendering</th>
+        <th>Neural Network Topology</td>
+	<th>Last Log</td>
+        <th>Rendering</td>
       </tr>
     </thead>
     <tbody>
 
 	$for k,d in dir_list.iteritems():
-		$ text = d.split('Iter')[0].split('\n')
-		$ last_log = d.split('Iter')[-1].split('\n')
+		$ text = d.split('\n')
 		<tr>
 		<td>
 		$for tx in text:
