@@ -29,9 +29,9 @@ class NeuralNet:
 
 	def genTopology(self):
 		topology = []
-		topology.append(random.randint(2,20))
+		topology.append(random.randint(10,20))
 		for i in range(random.randint(1,5)):
-			topology.append(random.randint(2,20))
+			topology.append(random.randint(10,20))
 		return topology
 		
 	def makeModel(self,topology, lr, num_of_params):

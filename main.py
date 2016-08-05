@@ -55,6 +55,7 @@ def trainNetwork(dh):
 	lg.log_header([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
 	lg.toterm()
 	
+	trn_error = []
 	val_error = []
 	for i in range(100):
 		print "Iter:  " + str(i).zfill(3)+" --- "+str(epochs*i)
@@ -71,10 +72,18 @@ def trainNetwork(dh):
 			
 		actual = array(output_vector)
 		guessed = array(guessed)
-		valid_set = ~isnan(guessed)
-		error.append( mean(abs(actual[valid_set]-guessed[valid_set])/actual[valid_set]) )
 		
-		val_error_raw = []
+		### training error
+		wguessed = []
+		for wi in zip(wi_vec,wo_vec):
+			wguessed.append(float(model.predict(array([wi[0]]))))
+		
+		wactual = array(wo_vec)
+		wguessed = array(wguessed)
+		valid_set = ~isnan(wguessed)
+		trn_error.append( mean(abs(wactual[valid_set]-wguessed[valid_set])/wactual[valid_set]) )
+		
+		### validation error
 		vguessed = []
 		for vi in zip(vi_vec,vo_vec):
 			vguessed.append(float(model.predict(array([vi[0]]))))
@@ -86,24 +95,24 @@ def trainNetwork(dh):
 		
 		lowest_error[0] += 1
 		if not lowest_error[1]:
-			lowest_error[1] = error[-1]
-		if lowest_error[1] > error[-1]:
-			lowest_error = [0, error[-1]]
+			lowest_error[1] = trn_error[-1]
+		if lowest_error[1] > trn_error[-1]:
+			lowest_error = [0, trn_error[-1]]
 			
 		if lowest_error[0] >= 3:
 			model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
 			
 		if lowest_error[0] >= 13:
-			pltD.plot(raw, actual, guessed, error, val_error, 0,filepath = 'logs/static/'+name+'.png')
-			return error[-1]
-		
+			pltD.plot(raw, actual, guessed, trn_error, val_error, 0,filepath = 'logs/static/'+name+'.png')
+			return trn_error[-1]
+
 		nn.saveModel()
 		pltD.addData([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
-		pltD.plot(raw, actual, guessed, error, val_error, i)
+		pltD.plot(raw, actual, guessed, trn_error, val_error, i)
 	
 	nn.saveModel()
-	pltD.plot(raw, actual, guessed, error, val_error, 0,filepath = 'logs/static/'+name+'.png')
-	return error[-1]
+	pltD.plot(raw, actual, guessed, trn_error, val_error, 0,filepath = 'logs/static/'+name+'.png')
+	return trn_error[-1]
 	
 dh = DataHandle()
 while True:
