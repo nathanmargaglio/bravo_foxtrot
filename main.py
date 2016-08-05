@@ -11,19 +11,35 @@ from neuralnet import NeuralNet
 from plotdevice import plotDevice
 from logger import Logger
 
-def trainNetwork(dh):
-	wi_vec, wo_vec, vi_vec, vo_vec = dh.getWorkingData()
+def initializeModel(dh):
+	# create a starting topology
+	topology = [20,15,10]
 	
-	raw = dh.getRawData()
-	nn = NeuralNet(wi_vec.shape[1])
-	if len(sys.argv) > 1:
-		nn.name = sys.argv[1] + "_" + nn.name
-	name = nn.name
+	# we initialize a neural net using the topology
+	nn = NeuralNet(dh.getInputSize(), topology)
+
+	return nn
+	
+def randomModel(dh):
+	nn = NeuralNet(dh.getInputSize())
 	
 	# This generates a topology and learning_rate (currently randomly)
 	topology, learning_rate, epochs = nn.getTopology()
-	# This generates a random NN model
+	
+	return nn
+
+def trainNetwork(dh):
+	# we initialize a dataset
+	wi_vec, wo_vec, vi_vec, vo_vec = dh.getWorkingData()
+	raw = dh.getRawData()
+	
+	nn = initializeModel(dh)
 	model = nn.getModel()
+	topology, learning_rate, epochs = nn.getTopology()
+	
+	if len(sys.argv) > 1:
+		nn.name = sys.argv[1] + "_" + nn.name
+	name = nn.name
 
 	pltD = plotDevice(name)
 	pltD.setParams(dh.getTrainingParameters())
@@ -53,28 +69,27 @@ def trainNetwork(dh):
 			guessed.append(float(model.predict(array([input_single]))))
 		actual = array(output_vector)
 		guessed = array(guessed)
-		error.append(current_error)
+		valid_set = ~isnan(guessed)
+		error.append( mean(abs(actual[valid_set]-guessed[valid_set]))/mean(actual) )
 		
 		val_error_raw = []
 		for vi in zip(vi_vec,vo_vec):
 			vguessed = float(model.predict(array([vi[0]])))
 			val_error_raw.append(abs(vguessed-vi[1]))
-		val_error.append(mean(val_error_raw))
+		val_error.append( mean(val_error_raw)/mean(vo_vec) )
 		
 		lowest_error[0] += 1
 		if not lowest_error[1]:
 			lowest_error[1] = error[-1]
 		if lowest_error[1] > error[-1]:
 			lowest_error = [0, error[-1]]
-		if lowest_error[0] >= 3:
+			
+		if lowest_error[0] >= 4:
+			model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
+			
+		if lowest_error[0] >= 10:
 			pltD.plot(raw, actual, guessed, error, val_error, 0,filepath = 'logs/static/'+name+'.png')
 			return error[-1]
-			
-		try:
-			if error[-1] > error[-2]:
-				model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
-		except:
-			pass
 		
 		nn.saveModel()
 		pltD.addData([name, topology, learning_rate, decay_rate, batch_ratio, epochs])
@@ -86,10 +101,9 @@ def trainNetwork(dh):
 	
 dh = DataHandle()
 while True:
-	for param_set in ['alpha','beta','gamma']:
-		print "Starting Training..."
-		dh.setTrainingParameters(param_set)
-		results = trainNetwork(dh)
-		print "Training Complete..."
-		print
+	print "Starting Training..."
+	dh.setTrainingParameters('all')
+	results = trainNetwork(dh)
+	print "Training Complete..."
+	print
 	

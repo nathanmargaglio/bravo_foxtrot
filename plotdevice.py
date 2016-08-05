@@ -80,7 +80,7 @@ class plotDevice:
 
 		ax22.plot(error,'g')
 		ax22.plot(val_error,'r')
-		plt.title(str(error[-1]))
+		plt.title(str(error[-1]) + ' / ' + str(val_error[-1]))
 		
 		ax11.grid(b=False)
 		ax12.grid(b=False)

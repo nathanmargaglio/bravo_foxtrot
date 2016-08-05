@@ -12,9 +12,17 @@ from keras.optimizers import SGD, Adam
 from keras.layers.normalization import BatchNormalization
 
 class NeuralNet:
-	def __init__(self, num_of_params):
+	def __init__(self, num_of_params, topology=None):
 		self.name = str(int(time()))
-		self.topology, self.learning_rate, self.epochs = self.genTopology()
+		
+		if not topology: # if we do not pass any topology at init
+			# generate a random topology
+			self.topology, self.learning_rate, self.epochs = self.genTopology()
+		else: # otherwise
+			self.learning_rate = 5e-3
+			self.epochs = 10
+			self.topology = topology
+			
 		self.num_of_params = num_of_params
 		self.model = self.makeModel(self.topology, self.learning_rate,
 									self.num_of_params)
@@ -25,7 +33,7 @@ class NeuralNet:
 		for i in range(random.randint(1,2)):
 			topology.append(random.randint(2,20))
 		learning_rate = 5e-3
-		epochs=10
+		epochs=100
 		return topology, learning_rate, epochs
 		
 	def makeModel(self,topology, lr, num_of_params):
@@ -45,9 +53,9 @@ class NeuralNet:
 		model.add(Dense(output_dim=1, init='uniform', 
 						activation="linear",bias=True))
 
-		sgd = SGD(lr=lr)
-		#~ adam = Adam(lr = lr)
-		model.compile(loss='mae', optimizer=sgd, metrics=['MAE'])
+		#~ sgd = SGD(lr=lr)
+		adam = Adam(lr = lr)
+		model.compile(loss='mae', optimizer=adam, metrics=['MAE'])
 		return model
 		
 	def getTopology(self):

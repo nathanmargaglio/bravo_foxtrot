@@ -32,16 +32,16 @@ class DataHandle:
 			self.training_columns = ['X','Y']
 		if params == 'beta':
 			# alpha is initially trained on (X,Y) coordinates
-			self.training_columns = ['X','Y','Assessed Value']
+			self.training_columns = ['Assessed Value']
 		if params == 'gamma':
 			# alpha is initially trained on (X,Y) coordinates
-			self.training_columns = ['X','Y','Assessed Value','DOM']
+			self.training_columns = ['X','Y','Assessed Value']
 	
 	def setTargetParameters(self, params='default'):
 		if type(params) == 'list':
 			self.target_columns = params
 		if params == 'default':
-			self.target_columns = ['SP/SF']
+			self.target_columns = ['Sale Price']
 			
 	def getTrainingParameters(self):
 		return self.training_columns
@@ -54,6 +54,9 @@ class DataHandle:
 		
 	def getRawData(self):
 		return self.raw
+		
+	def getInputSize(self):
+		return self.input_matrix.shape[1]
 		
 	def importData(self):
 		raw = None
@@ -150,6 +153,6 @@ class DataHandle:
 		
 if __name__ == "__main__":
 	dh = DataHandle()
-	dh.getWorkingData()
+	print dh.getInputSize()
 		
 		
