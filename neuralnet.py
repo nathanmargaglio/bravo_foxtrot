@@ -17,7 +17,7 @@ class NeuralNet:
 		
 		if not topology: # if we do not pass any topology at init
 			# generate a random topology
-			self.topology, self.learning_rate, self.epochs = self.genTopology()
+			self.topology = self.genTopology()
 		else: # otherwise
 			self.topology = topology
 		
