@@ -85,10 +85,10 @@ def trainNetwork(dh):
 		if lowest_error[1] > error[-1]:
 			lowest_error = [0, error[-1]]
 			
-		if lowest_error[0] >= 4:
+		if lowest_error[0] >= 3:
 			model.optimizer.lr.set_value(array(decay_rate*model.optimizer.lr.get_value(),dtype=float32))
 			
-		if lowest_error[0] >= 10:
+		if lowest_error[0] >= 13:
 			pltD.plot(raw, actual, guessed, error, val_error, 0,filepath = 'logs/static/'+name+'.png')
 			return error[-1]
 		

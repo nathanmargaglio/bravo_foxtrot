@@ -49,14 +49,23 @@ class plotDevice:
 		#~ xi = linspace(min(raw_plot['X']), max(raw_plot['X']), 50)
 		#~ yi = linspace(min(raw_plot['Y']), max(raw_plot['Y']), 50)
 		
+		#Plot arbitrary region (for wire frame)
+		xi_wire = linspace(-1., 0, 50)
+		yi_wire = linspace(-1., 0, 50)
+		
+		X_wire, Y_wire = meshgrid(xi_wire, yi_wire)
+		
+		Z_wire = griddata(	raw_plot['X'], 
+						raw_plot['Y'], 
+						array(raw_plot['Z']), 
+						xi_wire, yi_wire)
+		
 		#Plot arbitrary region
 		xi = linspace(-1., 0, 50)
 		yi = linspace(-1., 0, 50)
 		
 		X, Y = meshgrid(xi, yi)
-				
-		#~ raw_plot[['Z','Latitude','Longitude']].to_csv("qgis_data.csv")
-		
+
 		Z = griddata(	raw_plot['X'], 
 						raw_plot['Y'], 
 						array(raw_plot['Z']), 
@@ -68,7 +77,7 @@ class plotDevice:
 		#~ surf = ax11.plot_surface(X, Y, Z, rstride=10, cstride=1, facecolors=cm.cool(N),
 						#~ linewidth=1, antialiased=True)
 
-		wire = ax11.plot_wireframe(X, Y, Z)
+		wire = ax11.plot_wireframe(X_wire, Y_wire, Z_wire)
 		contour = ax12.contourf(X, Y, Z)
 
 		ax11.set_xlim3d(min(xi), max(xi))
