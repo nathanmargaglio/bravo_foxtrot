@@ -34,6 +34,9 @@ class index:
     def GET(self, name):
 		if name == "qgis":
 			return render.maps()
+		if "gmap" in name:
+			trunc = name.split('_')[1]
+			return open('{}/map.html'.format(trunc),'rb').read()
 		if not name:
 			dir_list = get_dir_list()
 			return render.index(dir_list)
