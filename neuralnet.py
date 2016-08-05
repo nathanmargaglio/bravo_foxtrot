@@ -19,10 +19,10 @@ class NeuralNet:
 			# generate a random topology
 			self.topology, self.learning_rate, self.epochs = self.genTopology()
 		else: # otherwise
-			self.learning_rate = 5e-3
-			self.epochs = 10
 			self.topology = topology
-			
+		
+		self.learning_rate = 5e-3
+		self.epochs = 10
 		self.num_of_params = num_of_params
 		self.model = self.makeModel(self.topology, self.learning_rate,
 									self.num_of_params)
@@ -30,11 +30,9 @@ class NeuralNet:
 	def genTopology(self):
 		topology = []
 		topology.append(random.randint(2,20))
-		for i in range(random.randint(1,2)):
+		for i in range(random.randint(1,5)):
 			topology.append(random.randint(2,20))
-		learning_rate = 5e-3
-		epochs=100
-		return topology, learning_rate, epochs
+		return topology
 		
 	def makeModel(self,topology, lr, num_of_params):
 		model = Sequential()

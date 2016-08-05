@@ -13,7 +13,7 @@ from logger import Logger
 
 def initializeModel(dh):
 	# create a starting topology
-	topology = [20,15,10]
+	topology = [20,10]
 	
 	# we initialize a neural net using the topology
 	nn = NeuralNet(dh.getInputSize(), topology)
@@ -33,7 +33,8 @@ def trainNetwork(dh):
 	wi_vec, wo_vec, vi_vec, vo_vec = dh.getWorkingData()
 	raw = dh.getRawData()
 	
-	nn = initializeModel(dh)
+	#~ nn = initializeModel(dh)
+	nn = randomModel(dh)
 	model = nn.getModel()
 	topology, learning_rate, epochs = nn.getTopology()
 	
@@ -102,7 +103,7 @@ def trainNetwork(dh):
 dh = DataHandle()
 while True:
 	print "Starting Training..."
-	dh.setTrainingParameters('all')
+	dh.setTrainingParameters('gamma')
 	results = trainNetwork(dh)
 	print "Training Complete..."
 	print
