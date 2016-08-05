@@ -5,29 +5,28 @@ from numpy import *
 
 class Logger:
 	def __init__(self, name):
+		self.name=name
 		if not os.path.exists('logs'):
 			os.mkdir('logs')
 		os.mkdir('logs/'+name)
 		os.mkdir('logs/'+name+'/img')
 		f = open('logs/'+name+'/'+name+".txt",'w')
 		f.close()
-	
-		self.oldstdout = sys.stdout
-		self.f = open('logs/'+name+'/'+name+".txt",'a')
-		sys.stdout = self.f
 		
 	def log_header(self, initilizers):
+
+		f = open('logs/'+self.name+'/'+self.name+".txt",'a')
+
 		name, topology, trn_error, val_error = initilizers
-		print "Model Name       : " + name
-		print "Topology         : " + " - ".join(array(topology,dtype=str))
-		print "Training Error   : " + str(trn_error)
-		print "Validation Error : " + str(val_error)
-		print
 		
-	def save(self):
-		self.f.close()
-		self.f = open('logs/'+name+'/'+name+".txt",'a')
-		sys.stdout = self.f
+		txtstr = ""
 		
-	def toterm(self):
-		sys.stdout = self.oldstdout
+		txtstr += "Model Name       : " + name + '\n'
+		txtstr += "Topology         : " + " - ".join(array(topology,dtype=str)) + '\n'
+		txtstr += "Training Error   : " + str(trn_error[-1]) + '\n'
+		txtstr += "Validation Error : " + str(val_error[-1]) + '\n'
+		
+		f.write(txtstr)
+		f.close()
+		
+		

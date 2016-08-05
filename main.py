@@ -29,9 +29,9 @@ def randomModel(dh):
 	return nn
 	
 def exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error):
-	lg.log_header([name, topology, trn_error, val_error])
-	pltD.addData([name, topology, trn_error, val_error])
-	pltD.plot(raw, actual, guessed, trn_error, val_error, 1,filepath = 'logs/static/'+name+'.png')
+	lg.log_header([nn.name, nn.topology, trn_error, val_error])
+	pltD.addData([nn.name, nn.topology, trn_error, val_error])
+	pltD.plot(raw, actual, guessed, trn_error, val_error, 1,filepath = 'logs/static/'+nn.name+'.png')
 	nn.saveModel()
 
 def trainNetwork(dh):
@@ -47,6 +47,10 @@ def trainNetwork(dh):
 	if len(sys.argv) > 1:
 		nn.name = sys.argv[1] + "_" + nn.name
 	name = nn.name
+	
+	print "Starting Training on " + name
+	print "Topology: " + " - ".join(array(topology,dtype=str))
+	print "--------------------"
 
 	pltD = plotDevice(name)
 	pltD.setParams(dh.getTrainingParameters())
@@ -58,17 +62,11 @@ def trainNetwork(dh):
 	lowest_error = [0,None]
 	
 	lg = Logger(name)
-	lg.toterm()
 	
 	trn_error = []
 	val_error = []
 	for i in range(100):
-		print "Iter:  " + str(i).zfill(3)+" --- "+str(epochs*i)
 		hist = model.fit(wi_vec, wo_vec, verbose = 0, nb_epoch=epochs)  # starts training
-		current_error = hist.history['mean_absolute_error'][-1]
-		print "Error: " + str(current_error)
-		print "LR:    " + str(model.optimizer.lr.get_value())
-		print
 		
 		guessed = []
 		input_vector, output_vector = dh.getIOData()
@@ -113,13 +111,22 @@ def trainNetwork(dh):
 		nn.saveModel()
 		pltD.addData([name, topology, trn_error, val_error])
 		pltD.plot(raw, actual, guessed, trn_error, val_error, i)
+		
+		print "Iteration       : " + str(i).zfill(3)
+		print "Training Error  : " + str(trn_error[-1])
+		print "Validation Error: " + str(val_error[-1])
+		
+		try:
+			print "Delta Trn Error : " + str(abs(trn_error[-1]-trn_error[-2]))
+			print "Delta Val Error : " + str(abs(val_error[-1]-val_error[-2]))
+		except:
+			pass
+		print
 	
 	exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error)
 	
 dh = DataHandle()
-print "Starting Training..."
 dh.setTrainingParameters('gamma')
 results = trainNetwork(dh)
-print "Training Complete..."
-print
+print "Training Complete."
 	
