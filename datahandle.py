@@ -1,6 +1,7 @@
 import pandas as pd
 from numpy import *
 from time import time
+import json
 import os
 import random
 import sys
@@ -35,7 +36,8 @@ class DataHandle:
 			self.training_columns = ['Assessed Value']
 		if params == 'gamma':
 			# alpha is initially trained on (X,Y) coordinates
-			self.training_columns = ['X','Y','Assessed Value']
+			self.training_columns = ['X','Y','DOM','Assessed Value', 'Lot Dimensions Frontage', 
+									'Lot Dimensions Depth', 'Age', 'Sq Ft Total', 'Beds Total', 'Baths Total']
 	
 	def setTargetParameters(self, params='default'):
 		if type(params) == 'list':
@@ -61,7 +63,8 @@ class DataHandle:
 	def importData(self):
 		raw = None
 		#~ for fn in os.listdir('data'):
-		for fn in ['erie_2015_v2.csv']:
+		#~ for fn in ['erie_2015_v2.csv']:
+		for fn in ['kenmore_geo.csv']:
 			next_file = pd.read_csv("data/{}".format(fn), thousands=',')
 			raw = pd.concat((raw, next_file))
 		raw.reset_index()
@@ -69,7 +72,8 @@ class DataHandle:
 
 	def importGeoData(self):
 		master_coords = None
-		for fn in ['erie_2015_geo.csv']:
+		#~ for fn in ['erie_2015_geo.csv']:
+		for fn in ['kenmore_geo.csv']:
 			coords = pd.read_csv("data/{}".format(fn))
 			if 'LAT_M' in coords.columns:
 				coords['Latitude'] = array(coords['LAT_D']) + array(coords['LAT_M'])/60. + array(coords['LAT_S'])/3600.
@@ -84,7 +88,7 @@ class DataHandle:
 		return master_coords
 
 	def joinData(self, raw, master_coords):
-		raw = pd.merge(raw, master_coords, on = ('Address', 'City', 'Zip Code'), how='inner')
+		#~ raw = pd.merge(raw, master_coords, on = ('Address', 'City', 'Zip Code'), how='inner')
 
 		raw['X'] = raw['Latitude']
 		raw['Y'] = raw['Longitude']
@@ -94,42 +98,56 @@ class DataHandle:
 	def basicClean(self, raw):
 		# create 'SP/AV' column, remove "Changed" and "AV == 0" listings,
 		# and trimming 'weird' listings
-		raw[['Sale Price','Assessed Value']] = \
-						(raw[['Sale Price','Assessed Value']]
+		raw[['Sale Price','Assessed Value','List Price']] = \
+						(raw[['Sale Price','Assessed Value','List Price']]
 						.replace( '[\$,)]','', regex=True )).astype(float)
 		raw['SP/AV'] = raw['Sale Price']/raw['Assessed Value']
 		raw['SP/SF'] = raw['Sale Price']/raw['Sq Ft Total']
 		raw = raw[raw['Assessed Value'] != 0].reset_index()
 		raw = raw[raw['SP/AV'] < 10]
 		raw = raw[raw['SP/SF'] < 200]
+		raw = raw[raw['Latitude'] < 42.98] #For Kenmore
 		return raw
 		
-	def normalize(self, data):
+	def normalize(self, name, data, dic):
 		# This function does a min/max normalization.
 		# It returns the normalized vector.
 		data = pd.Series(data)
-		try:
-			data -= mean(data)
-		except:
-			for n,d in enumerate(data):
-				if type(d) == str:
-					data.iloc[n] = 0
+		dic[name] = {}
+		#~ try:
+			#~ dic[name]['mean'] = mean(data)
+			#~ data -= mean(data)
+		#~ except:
+			#~ for n,d in enumerate(data):
+				#~ if type(d) == str:
+					#~ data.iloc[n] = 0
+			#~ dic[name]['mean'] = mean(data)
+			#~ data -= mean(data)
+		dic[name]['min'] = min(data)
 		data = data - min(data)
+		dic[name]['max'] = max(data)
 		data = data/max(data)
 		data -= 0.5
 		data *=2
-		return data
+		
+		return data, dic
 		
 	def genIOMatrix(self, raw, training, targets):
 		input_vector = empty((len(raw),len(training)), dtype=float)
 		output_vector = empty((len(raw),len(targets)), dtype=float)
-
+		dic = {}
+		names = []
 		for n,c in enumerate(training):
-			raw[c] = self.normalize(raw[c])
+			names.append(c)
+			raw[c], dic = self.normalize(c, raw[c], dic)
 			input_vector[:,n] = array(raw[c], dtype=object)
 		for n, c in enumerate(targets):
 			output_vector[:,n] = array(raw[c], dtype=object)
-			
+		
+		final_dic = {'names':names,'values':dic}
+		f = open("norm_params.json",'w')
+		json.dump(final_dic,f)
+		f.close()
 		return input_vector, output_vector
 		
 	def getWorkingData(self):
@@ -151,8 +169,13 @@ class DataHandle:
 
 		return wi_vec, wo_vec, vi_vec, vo_vec
 		
+	def plotGeoCords(self):
+		import matplotlib.pyplot as plt
+		plt.plot(self.raw['Latitude'], self.raw['Longitude'])
+		plt.show()
+		
 if __name__ == "__main__":
-	dh = DataHandle()
-	print dh.getInputSize()
+	dh = DataHandle(params="gamma")
+	dh.plotGeoCords()
 		
 		

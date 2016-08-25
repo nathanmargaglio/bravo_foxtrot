@@ -28,7 +28,7 @@ class GeoPlot:
 			lngs = array(wd['Longitude'])
 			coords = zip(lats, lngs)
 			for c in coords:
-				self.gmap.circle(c[0], c[1], radius=100, face_alpha=alpha_vals[i], face_color = gradients[i], edge_color = gradients[i])
+				self.gmap.circle(c[0], c[1], radius=10, face_alpha=alpha_vals[i], face_color = gradients[i], edge_color = gradients[i])
 				
 		open('logs/'+name+"/map.html",'w').close()
 		key = 'AIzaSyAOPK5kDNgtv4lLnCRKC9cjnGVU8-4TiYY'

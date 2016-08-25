@@ -6,6 +6,8 @@ import os
 import random
 import sys
 
+import matplotlib.pyplot as plt
+
 from datahandle import DataHandle
 from neuralnet import NeuralNet
 from plotdevice import plotDevice
@@ -39,8 +41,8 @@ def trainNetwork(dh):
 	wi_vec, wo_vec, vi_vec, vo_vec = dh.getWorkingData()
 	raw = dh.getRawData()
 	
-	#~ nn = initializeModel(dh)
-	nn = randomModel(dh)
+	nn = initializeModel(dh)
+	#~ nn = randomModel(dh)
 	model = nn.getModel()
 	topology, learning_rate, epochs = nn.getTopology()
 	
@@ -84,7 +86,9 @@ def trainNetwork(dh):
 		wactual = array(wo_vec)
 		wguessed = array(wguessed)
 		valid_set = ~isnan(wguessed)
-		trn_error.append( mean(abs(wactual[valid_set]-wguessed[valid_set])/wactual[valid_set]) )
+		raw_trn_error = abs(wactual[valid_set]-wguessed[valid_set])/wactual[valid_set]
+		#~ raw_trn_error = sorted(raw_trn_error)[:int(len(raw_trn_error)*0.682)]
+		trn_error.append( mean(raw_trn_error) )
 		
 		### validation error
 		vguessed = []
@@ -94,7 +98,10 @@ def trainNetwork(dh):
 		vactual = array(vo_vec)
 		vguessed = array(vguessed)
 		valid_set = ~isnan(vguessed)
-		val_error.append( mean(abs(vactual[valid_set]-vguessed[valid_set])/vactual[valid_set]) )
+		raw_val_error = abs(vactual[valid_set]-vguessed[valid_set])/vactual[valid_set]
+		#~ raw_val_error = sorted(raw_val_error)[:int(len(raw_val_error)*0.682)]
+		val_error.append( mean(raw_val_error) )
+		#~ val_error.append( mean(abs(vactual[valid_set]-vguessed[valid_set])/vactual[valid_set]) )
 		
 		lowest_error[0] += 1
 		if not lowest_error[1]:
@@ -126,9 +133,8 @@ def trainNetwork(dh):
 	
 	exitTraining(nn, lg, pltD, raw, actual, guessed, trn_error, val_error)
 	return 0
-	
-dh = DataHandle()
-dh.setTrainingParameters('gamma')
+
+dh = DataHandle("gamma")
 results = trainNetwork(dh)
 print "Training Complete."
 	

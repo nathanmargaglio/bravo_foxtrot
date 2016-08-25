@@ -14,6 +14,13 @@ def get_dir_list():
 			except:
 				pass
 	return dir_list
+
+def get_exp_list():
+	exp_list = []
+	for i in os.listdir('./exp'):
+		if os.path.isdir("./exp/"+i):
+			exp_list.append(i)
+	return exp_list
 	
 ###
 
@@ -24,6 +31,7 @@ render = web.template.render('templates/')
 urls = (
 	'/favicon.ico','icon',
 	'/qgis/(.*)', 'maps',
+	#'/exp/(.*)','exp',
     	'/(.*)', 'index'
 )
 
@@ -34,6 +42,14 @@ class index:
     def GET(self, name):
 		if name == "qgis":
 			return render.maps()
+		if "exp" in name:
+			print name
+			print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+			if name == "exp":
+				exp_list = get_exp_list()
+				return render.exp(exp_list)
+			else:
+				return open(name+"/page.html",'rb').read()
 		if "gmap" in name:
 			trunc = "_".join(name.split('_')[1:])
 			return open('{}/map.html'.format(trunc),'rb').read()

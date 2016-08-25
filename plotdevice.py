@@ -52,12 +52,12 @@ class plotDevice:
 		self.gp.draw(raw_plot)
 		
 		# Plot Everything
-		#~ xi = linspace(min(raw_plot['X']), max(raw_plot['X']), 50)
-		#~ yi = linspace(min(raw_plot['Y']), max(raw_plot['Y']), 50)
+		xi_wire = linspace(min(raw_plot['Latitude']), max(raw_plot['Latitude']), 50)
+		yi_wire = linspace(min(raw_plot['Longitude']), max(raw_plot['Longitude']), 50)
 		
 		#Plot arbitrary region (for wire frame)
-		xi_wire = linspace(41.5, 43.5, 50)
-		yi_wire = linspace(-80., -77., 50)
+		#~ xi_wire = linspace(41.5, 43.5, 50)
+		#~ yi_wire = linspace(-80., -77., 50)
 		
 		X_wire, Y_wire = meshgrid(xi_wire, yi_wire)
 		
@@ -67,9 +67,12 @@ class plotDevice:
 						xi_wire, yi_wire)
 		
 		#Plot arbitrary region
-
-		xi = linspace(41.5, 43.5, 50)
-		yi = linspace(-80., -77., 50)
+		#~ xi = linspace(41.5, 43.5, 50)
+		#~ yi = linspace(-80., -77., 50)
+		
+		# Plot Everything
+		xi = linspace(min(raw_plot['Latitude']), max(raw_plot['Latitude']), 50)
+		yi = linspace(min(raw_plot['Longitude']), max(raw_plot['Longitude']), 50)
 		
 		X, Y = meshgrid(xi, yi)
 
@@ -129,5 +132,3 @@ class plotDevice:
 		ax12.cla()
 		ax22.cla()
 		ax21.cla()
-
-		

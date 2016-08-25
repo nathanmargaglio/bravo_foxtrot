@@ -5,7 +5,7 @@ import os
 import random
 import sys
 
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
 from keras.callbacks import Callback
 from keras.layers import Dense, Activation
 from keras.optimizers import SGD, Adam
@@ -21,8 +21,8 @@ class NeuralNet:
 		else: # otherwise
 			self.topology = topology
 		
-		self.learning_rate = 5e-3
-		self.epochs = 10
+		self.learning_rate = 1e-2
+		self.epochs = 100
 		self.num_of_params = num_of_params
 		self.model = self.makeModel(self.topology, self.learning_rate,
 									self.num_of_params)
@@ -68,6 +68,11 @@ class NeuralNet:
 			json_file.write(model_json)
 		# serialize weights to HDF5
 		self.model.save_weights('logs/'+self.name+'/weights.h5',overwrite=True)
+
+class PredictionModel:
+	def __init__(self, name):
+		self.name = name
+		self.model = self.loadModel(model_id=name)
 		
 	def loadModel(self, model_id=None, weights=True):
 		if not model_id:
@@ -75,8 +80,10 @@ class NeuralNet:
 		json_file = open('logs/'+model_id+'/model.json', 'r')
 		loaded_model_json = json_file.read()
 		json_file.close()
-		self.model = model_from_json(loaded_model_json)
+		
+		model = model_from_json(loaded_model_json)
 		if weights:
-			self.model.load_weights('logs/'+model_id+'/weights.h5')
-		sgd = SGD(lr=self.learning_rate)
+			model.load_weights('logs/'+model_id+'/weights.h5')
+		sgd = SGD(lr=5e-3)
 		model.compile(loss='mae', optimizer=sgd, metrics=['MAE'])
+		return model
