@@ -49,5 +49,3 @@ def parser(path):
 
 	final_df = df.merge(res_df,how='outer',on=['Owner 1 First Name','Owner 1 Last Name'])
 	final_df.to_csv("data/"+path+"/results.csv")
-
-parser("8_23_2016")
