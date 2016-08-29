@@ -1,0 +1,67 @@
+/* http://dabblet.com/gist/5648624 scrolling table ?, Yep! */
+#blocTableaux {
+font-size:16px;
+width:92em;
+height:320px;			/* set height here */
+margin:3em  auto;position:relative;padding:0;border:1em solid transparent;box-shadow:0 0 5px;border-radius:0.25em;text-align:center}
+#blocG, #blocD{display:inline-block;width:45.45em;height:100%;margin:0 0.1em;overflow-y:scroll;box-shadow:0 0 0 1px;background:#ddd}
+#tabG, #tabD {text-align:center;
+font-size :10px; 		/* !!! */
+width:100%;table-layout:fixed;}
+thead, tfoot {background-color : #159;color : #ddd;}
+tbody {background-color : #def;}
+						/* copy of thead to overlap it and remain on container top. 
+						It brings no weird extra content .GCyrillus */
+tfoot {table-layout:fixed;position:absolute;top:0px;left:auto;
+width:70.9em;			/* => [45.25 - 1em (scrollbar)] x 1.6 (16px/10px)  */
+display:table;background:#def;margin-left:-1px;box-shadow:0px 3px 5px   #ccc}
+tfoot th { box-shadow:0 0 0 1px #ddd; background:#159;}
+						/* largeur de colonnes via class */
+#blocTableaux  .t1th1, 
+#blocTableaux  .t1th2, 
+#blocTableaux  .t2th1 
+{width:1.9em;}
+#blocTableaux  .t1th6,
+#blocTableaux  .t1th7 
+{width:3em;}
+#blocTableaux  .t1th9 
+{width:4em;}
+#blocTableaux  .t2th10 
+{width:4.4em;}
+#blocTableaux  .t2th6 
+{width:5em;}
+#blocTableaux  .t1th11 
+{width:5.1em}
+.t1th11 +th 
+{width:5.25em;}
+#blocTableaux  .t1th3, 
+#blocTableaux  .t1th4, 
+#blocTableaux  .t2th2,
+#blocTableaux  .t2th4, 
+#blocTableaux  .t2th7, 
+#blocTableaux  .t2th8 
+{width:6em;}
+#blocTableaux  .t2th5
+{width:6.25em;}
+#blocTableaux .t2th9 
+{width:9em;} 
+#blocTableaux .t1th8 
+{width:12.3em;}
+#blocTableaux .t1th5
+{width:12.35em;}
+#blocTableaux .t1th10
+{width:16em;}
+#blocTableaux .t2th3
+{width:20.70em;}
+						/* extra makup for the fun */
+:empty {background:linear-gradient(-30deg,transparent 48% ,#999,transparent 52% ),linear-gradient(30deg,#def 48% ,#999,#def 52% ) ;}
+td b , th span{display:inline-block;color:#87BB40;}
+td b+b {color:#D81900;}
+tr:nth-child(odd) b+b {color:#87BB40;}
+tr:nth-child(odd) b:first-of-type {color:#D81900}
+tr:nth-child(4n) b+b {color:blue;}
+tr:nth-child(4n) b {color:orange;}
+tr:nth-child(8n) b {color:blue;}
+tr:nth-child(8n) b+b {color:orange;}
+th span {line-height:1em;font-size:1.2em;color:white;sborder:solid 1px;padding:0 0.25em;border-radius:1em;background:#87BB40 linear-gradient(180deg, #87BB40,#87BB40,green);box-shadow:0 0 1px 1px white;}
+tr input {transform:rotate(45deg);}
