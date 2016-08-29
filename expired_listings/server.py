@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 import pandas as pd
 import os
 
@@ -24,8 +24,11 @@ def index():
 	
 @app.route("/<exp>")
 def exp(exp):
-	data = pd.read_csv("data/"+exp+"/results.csv")
-	return render_template("expires.html", data=data, cols=SHOW_COLS)
+	try:
+		data = pd.read_csv("data/"+exp+"/results.csv")
+		return render_template("expires.html", data=data, cols=SHOW_COLS)
+	except:
+		return redirect("/")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=80,debug=True)

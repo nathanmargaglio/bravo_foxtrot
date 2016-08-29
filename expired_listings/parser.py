@@ -43,10 +43,11 @@ def parser(path):
 				app_res = {
 							'Owner 1 First Name':first,
 							'Owner 1 Last Name':last,
-							'Zip Code':str(zipcode),
 							'Phone':phone}
 				res_df = res_df.append(app_res, ignore_index=True)
 				print res_df.iloc[-1]
 
-	final_df = df.merge(res_df,on=['Owner 1 First Name','Owner 1 Last Name'])
+	final_df = df.merge(res_df,how='outer',on=['Owner 1 First Name','Owner 1 Last Name'])
 	final_df.to_csv("data/"+path+"/results.csv")
+
+parser("8_23_2016")

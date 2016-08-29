@@ -8,7 +8,8 @@ from pyvirtualdisplay import Display
 display = Display(visible=0, size=(1024, 768))
 display.start()
 
-def crawler(name):
+def crawler(name, date="today"):
+	print name,date
 	chromeOptions = webdriver.ChromeOptions()
 	prefs = {"download.default_directory" : "data/" + name}
 	chromeOptions.add_experimental_option("prefs",prefs)
@@ -42,7 +43,15 @@ def crawler(name):
 
 	time.sleep(2)
 	print "Searching for expires..."
-	driver.find_element_by_css_selector("a[id*='m_ucSearchButtons_m_lbSearch']").click()
+	
+	if date == "today":
+		driver.find_element_by_css_selector("a[id*='m_ucSearchButtons_m_lbSearch']").click()
+	else:
+		print "Setting date"
+		driver.find_element_by_id("FmFm9_Ctrl42_106_Ctrl42_TB").clear()
+		driver.find_element_by_id("FmFm9_Ctrl42_106_Ctrl42_TB").send_keys(date)
+		time.sleep(2)
+		driver.find_element_by_css_selector("a[id*='m_ucSearchButtons_m_lbSearch']").click()
 
 	time.sleep(2)
 	driver.find_element_by_css_selector("a[id*='m_lnkCheckAllLink']").click()
@@ -59,4 +68,5 @@ def crawler(name):
 	driver.quit()
 
 if __name__ == "__main__":
-	crawler("now")
+	for i in range(19,30):
+		crawler("8_{}_2016".format(str(i)),"08/{}/2016".format(str(i)))
