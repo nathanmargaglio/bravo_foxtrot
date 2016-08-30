@@ -63,15 +63,15 @@
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
-       id="filter5473"
-       x="-0.016850174"
-       width="1.0337003"
-       y="-0.041689656"
-       height="1.0833793">
+       id="filter5547"
+       x="-0.082325583"
+       width="1.1646512"
+       y="-0.22124999"
+       height="1.4425">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="2.0832586"
-         id="feGaussianBlur5475" />
+         stdDeviation="9.1497959"
+         id="feGaussianBlur5549" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -160,18 +160,20 @@
        y="10.894481"
        transform="matrix(1.0207261,0,0,1.0251764,-6.1508906,-4.131555)" />
     <path
-       style="fill:#3b00c5;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;filter:url(#filter4963)"
-       d="M 8.2710022,289.37535 C 107.19812,256.74281 371.43279,281.6319 424.92274,394.83062 L 387.70323,404.1355 -3.1048584e-7,400 Z"
+       style="fill:#3b00c5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4963)"
+       d="M 7.2371269,284.20597 C 96.859367,302.23332 385.90704,258.88664 352.55147,392.76287 L 387.70323,404.1355 -3.1048584e-7,400 Z"
        id="path4859"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <rect
-       style="opacity:1;fill:#3b00c5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:50;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5473)"
-       id="rect5343"
-       width="296.7222"
-       height="119.92953"
-       x="384.12735"
-       y="-34.583984" />
+       style="opacity:1;fill:#3b00c5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5547)"
+       id="rect5545"
+       width="266.73981"
+       height="99.252029"
+       x="377.70322"
+       y="-10.380733"
+       rx="25"
+       ry="25" />
   </g>
   <g
      inkscape:groupmode="layer"
