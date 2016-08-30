@@ -18,7 +18,7 @@ width:92em;
 height:320px;			/* set height here */
 
 margin:3em  auto;position:relative;padding:0;border:3em solid transparent;box-shadow:0 0 5px;border-radius:0.25em;text-align:center}
-#blocG, #blocD{display:inline-block;width:65.45em;height:100%;margin:0 0.1em;overflow-y:scroll;overflow-x:scroll;box-shadow:0 0 0 1px;background:#ddd}
+#blocG, #blocD{display:inline-block;width:70.45em;height:100%;margin:0 0.1em;overflow-y:scroll;overflow-x:scroll;box-shadow:0 0 0 1px;background:#ddd}
 #tabG, #tabD {text-align:center;
 
 font-size :10px;} 		/* !!! */
@@ -66,6 +66,7 @@ th, td {
 					<th>
 <input type="checkbox" name="{{i[0]}}" value="True" {% if saved.get(i[0]|string) %} checked {% endif %}>
 <input type="hidden" name="{{i[0]}}" value="False"></th>
+					<th><a href="svg?ofn={{i[1]["Owner 1 First Name"]}}&oln={{i[1]["Owner 1 Last Name"]}}&add={{i[1]["Address"]}}">SVG</a></th>
 				</tr>
 				{% endfor %}
 			</tbody>

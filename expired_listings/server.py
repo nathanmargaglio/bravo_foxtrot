@@ -31,6 +31,17 @@ def get_saved_data(exp):
 			saved = json.load(infile)
 	print saved
 	return saved
+	
+def get_svg(ofn, oln, add):
+	template_file = open("templates/test.svg")
+	temp = template_file.read()
+	template_file.close()
+
+	temp = temp.replace('owner_first_name',ofn)
+	temp = temp.replace('owner_last_name',oln)
+	temp = temp.replace('address',add)
+
+	return temp
 
 app = Flask(__name__)
 
@@ -41,6 +52,8 @@ def index():
 	
 @app.route("/<exp>")
 def exp(exp):
+	if exp=="favicon.ico":
+		pass
 	try:
 		data = pd.read_csv("data/"+exp+"/results.csv")
 		saved = get_saved_data(exp)
@@ -62,6 +75,13 @@ def submit(exp):
 	with open("data/"+exp+"/saved.json", 'w') as outfile:
 			json.dump(results,outfile)
 	return redirect('/')
+	
+@app.route("/svg")
+def svg():
+	ofn = request.args.get('ofn')
+	oln = request.args.get('oln')
+	add = request.args.get('add')
+	return get_svg(ofn, oln, add)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=80,debug=True)
