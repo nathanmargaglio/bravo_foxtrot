@@ -66,7 +66,7 @@ th, td {
 					<th>
 <input type="checkbox" name="{{i[0]}}" value="True" {% if saved.get(i[0]|string) %} checked {% endif %}>
 <input type="hidden" name="{{i[0]}}" value="False"></th>
-					<th><a href="svg?ofn={{i[1]["Owner 1 First Name"]}}&oln={{i[1]["Owner 1 Last Name"]}}&add={{i[1]["Address"]}}">SVG</a></th>
+					<th><a href="svg?ofn={{i[1]["Owner 1 First Name"]}}&oln={{i[1]["Owner 1 Last Name"]}}&add={{i[1]["Address"]}}&zpc={{i[1]["Zip Code_x"]}}">SVG</a></th>
 				</tr>
 				{% endfor %}
 			</tbody>
