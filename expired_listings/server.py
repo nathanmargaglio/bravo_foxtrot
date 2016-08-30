@@ -32,7 +32,7 @@ def get_saved_data(exp):
 	print saved
 	return saved
 	
-def get_svg(ofn, oln, add):
+def get_svg(ofn, oln, add, zpc):
 	template_file = open("templates/test.svg")
 	temp = template_file.read()
 	template_file.close()
@@ -40,7 +40,8 @@ def get_svg(ofn, oln, add):
 	temp = temp.replace('owner_first_name',ofn)
 	temp = temp.replace('owner_last_name',oln)
 	temp = temp.replace('address',add)
-
+	temp = temp.replace('zip_code',zpc)
+	
 	return temp
 
 app = Flask(__name__)
@@ -81,7 +82,8 @@ def svg():
 	ofn = request.args.get('ofn')
 	oln = request.args.get('oln')
 	add = request.args.get('add')
-	return get_svg(ofn, oln, add)
+	zpc = request.args.get('zpc')
+	return get_svg(ofn, oln, add, zpc)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=80,debug=True)

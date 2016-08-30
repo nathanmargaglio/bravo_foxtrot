@@ -10,10 +10,10 @@
  <g>
   <title>Layer 1</title>
 
-<image x="0" y="0" width="640" height="400" xlink:href="https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&amp;center=address+Buffalo+NY&amp;markers=color:blue%7Caddress+Buffalo+NY&amp;zoom=18&amp;size=640x400&amp;key=AIzaSyCw_m3nQkGSooqMn1uYaCFWZR_mUMLEOYU"/>
+<image x="0" y="0" width="640" height="400" xlink:href="https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&amp;center=address+zip_code&amp;markers=color:blue%7Caddress+zip_code&amp;zoom=18&amp;size=640x400&amp;key=AIzaSyCw_m3nQkGSooqMn1uYaCFWZR_mUMLEOYU"/>
 
   <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_1" y="100" x="79" stroke-width="0" stroke="#000" fill="#000000">owner_first_name</text>
   <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_2" y="124" x="80" stroke-width="0" stroke="#000" fill="#000000">owner_last_name</text>
-  <text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="148" x="80" stroke-width="0" stroke="#000" fill="#000000">address</text>
+  <text style="cursor: move;" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_3" y="148" x="80" stroke-width="0" stroke="#000" fill="#000000">address, zip_code</text>
  </g>
 </svg>
